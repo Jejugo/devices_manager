@@ -1,5 +1,4 @@
 import React from "react";
-import * as S from "./ListLayout.style";
 import PageHeader from "../../components/PageHeader/PageHeader";
 
 export default function ListLayout({

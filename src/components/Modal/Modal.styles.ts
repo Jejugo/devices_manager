@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { fonts } from "../../styles";
 
 interface ModalOverlayProps {
   isOpen: boolean;
@@ -31,14 +32,36 @@ const mobileMarginBottom = "60px";
 
 export const ModalContainer = styled.div<ModalContainerProps>`
   @media screen {
-    max-width: ${({ mobileFullSize }: { mobileFullSize: boolean }) =>
-      mobileFullSize ? "100%" : "90%"};
-    max-height: ${({ mobileFullSize }: { mobileFullSize: boolean }) =>
-      mobileFullSize ? `calc(100% - ${mobileMarginBottom})` : "80vh"};
-    width: ${({ mobileFullSize }: { mobileFullSize: boolean }) =>
-      mobileFullSize ? "100vw" : "auto"};
-    height: ${({ mobileFullSize }: { mobileFullSize: boolean }) =>
-      mobileFullSize ? "100vh" : "auto"};
+    max-height: ${({
+      mobileFullSize,
+      height,
+    }: {
+      mobileFullSize: boolean;
+      height: number;
+    }) => (mobileFullSize ? "100vh" : `auto`)};
+    max-width: ${({
+      mobileFullSize,
+      width,
+    }: {
+      mobileFullSize: boolean;
+
+      width: number;
+    }) => (mobileFullSize ? "100vw" : `auto`)};
+    width: ${({
+      mobileFullSize,
+      width,
+    }: {
+      mobileFullSize: boolean;
+
+      width: number;
+    }) => (mobileFullSize ? "100vw" : `auto`)};
+    height: ${({
+      mobileFullSize,
+      height,
+    }: {
+      mobileFullSize: boolean;
+      height: number;
+    }) => (mobileFullSize ? "100vh" : `auto`)};
     padding: 24px;
     border-radius: 8px;
     box-sizing: border-box;
@@ -109,10 +132,10 @@ ModalOverlay.displayName = "ModalOverlay";
 
 export const CloseButton = styled.img`
   position: absolute;
-  right: 15px;
-  top: 15px;
-  width: 25px;
-  height: 25px;
+  right: 16px;
+  top: 16px;
+  width: 15px;
+  height: 15px;
   cursor: pointer;
 `;
 
@@ -129,3 +152,9 @@ export const ScrollSection = styled.section`
 `;
 
 ScrollSection.displayName = "ScrollSection";
+
+export const ModalTitle = styled.h1`
+  font-size: ${fonts.large}px;
+  padding-top: 8px;
+  margin-bottom: 24px;
+`;

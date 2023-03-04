@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 
-const API = axios.create({
-  baseURL: "http://localhost:3000", // Set your default host here
+export const API = axios.create({
+  baseURL: process.env.REACT_APP_BASE_HOST,
 });
 
 interface IAPI {

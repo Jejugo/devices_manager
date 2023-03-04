@@ -9,6 +9,10 @@ export const SearchBar = styled.div`
   background-color: #fff;
   width: 270px;
   height: 38px;
+
+  &:focus-within {
+    outline: 2px solid #0078d4;
+  }
 `;
 
 export const SearchIcon = styled.div`

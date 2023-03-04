@@ -1,20 +1,24 @@
 import React, { useState, useContext, useEffect, createContext } from "react";
-import { sendRequest } from "../services";
+import { sendRequest } from "../../service";
+import { sortingTypes, devicesTypes } from "./constants";
 
-type DeviceType = {
+export type DropdownItem = {
   id: string;
-  name: "WINDOWS" | "Mac" | "Linux";
+  name: string;
+  value: string;
 };
 
 interface IDevicesContext {
   devices: Device[];
-  devicesTypes: DeviceType[];
+  sortingTypes: DropdownItem[];
+  devicesTypes: DropdownItem[];
   updateList: () => void;
 }
 
 const initialState = {
   devices: [] as Device[],
-  devicesTypes: [] as DeviceType[],
+  devicesTypes: [] as DropdownItem[],
+  sortingTypes: [] as DropdownItem[],
   updateList: () => {},
 };
 
@@ -27,24 +31,12 @@ export function useDevices() {
 export function DevicesProvider({ children }: { children: React.ReactNode }) {
   const [devices, setDevices] = useState<Device[]>([]);
 
-  // since these items are derived from the state it doesn't need to be a state object
-  const devicesTypes = devices
-    .reduce((acc: any, obj) => {
-      if (!acc.find((item: Device) => item.type === obj.type)) {
-        acc.push(obj);
-      }
-      return acc;
-    }, [])
-    .map((item: Device) => ({
-      id: item.id,
-      name: item.type,
-    }));
-
   const getDevices = async () => {
     const { data: devices } = await sendRequest({
       url: "devices",
       method: "GET",
     });
+
     setDevices(devices);
   };
 
@@ -57,7 +49,14 @@ export function DevicesProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <DevicesContext.Provider value={{ devices, devicesTypes, updateList }}>
+    <DevicesContext.Provider
+      value={{
+        devices,
+        sortingTypes,
+        devicesTypes,
+        updateList,
+      }}
+    >
       {children}
     </DevicesContext.Provider>
   );

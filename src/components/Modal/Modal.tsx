@@ -4,16 +4,20 @@ import * as S from "./Modal.styles";
 import ReactPortal from "../Portal/Portal";
 
 interface ModalProps {
+  title: string;
+  text?: string;
   width: number;
   height: number;
   mobileFullSize: boolean;
   footerComponent?: ReactNode;
   isOpen: boolean;
   onCloseButton: () => void;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 const Modal: FunctionComponent<ModalProps> = ({
+  title,
+  text,
   width,
   height,
   children,
@@ -23,17 +27,22 @@ const Modal: FunctionComponent<ModalProps> = ({
   isOpen,
 }) => {
   return (
-    <ReactPortal wrapperId="partners-modal">
+    <ReactPortal wrapperId="modal">
       <S.ModalOverlay isOpen={isOpen}>
-        <S.ModalContainer width={width} mobileFullSize={mobileFullSize}>
-          <S.CloseButton onClick={onCloseButton} />
-          <S.Body
-            height={height}
-            width={width - 60}
-            mobileFullSize={mobileFullSize}
-          >
-            {children}
-          </S.Body>
+        <S.ModalContainer
+          width={width}
+          height={height}
+          mobileFullSize={mobileFullSize}
+        >
+          <S.ModalTitle>{title}</S.ModalTitle>
+          <S.CloseButton onClick={onCloseButton} src="icons/CloseIcon.svg" />
+          {text && <p>{text}</p>}
+          {children && (
+            <S.Body width={width - 60} mobileFullSize={mobileFullSize}>
+              {children}
+            </S.Body>
+          )}
+
           {footerComponent && <S.Footer>{footerComponent}</S.Footer>}
         </S.ModalContainer>
       </S.ModalOverlay>

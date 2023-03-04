@@ -3,12 +3,13 @@ import Button from "../Button/Button";
 import * as S from "./PageHeader.styles";
 import Modal from "../Modal/Modal";
 import { FormProvider, useForm } from "react-hook-form";
-import Input from "../Input/Input";
-import Select from "../Select/Select";
+import Input from "../FormInput/FormInput";
+import Select from "../FormSelect/FormSelect";
 import { useState } from "react";
-import { useDevices } from "../../providers/DevicesProvider";
-import { useSnackbar } from "../../providers/SnackbarProvider";
-import { sendRequest } from "../../services";
+import { useDevices } from "../../providers/DevicesProvider/DevicesProvider";
+import { useSnackbar } from "../../providers/SnackbarProvider/SnackbarProvider";
+import { sendRequest } from "../../service";
+import ModalFooter from "../Modal/ModalFooter/ModalFooter";
 
 interface ModalAddFooterProps {
   onClose: () => void;
@@ -16,10 +17,15 @@ interface ModalAddFooterProps {
 
 const ModalEditFooter = ({ onClose }: ModalAddFooterProps) => {
   return (
-    <>
-      <Button onClick={onClose} color="#fff" title="Cancel" type="button" />
-      <Button type="submit" color="#337AB7" title="Submit" />
-    </>
+    <ModalFooter>
+      <Button
+        onClick={onClose}
+        variant="regular"
+        title="Cancel"
+        type="button"
+      />
+      <Button type="submit" variant="info" title="Submit" />
+    </ModalFooter>
   );
 };
 
@@ -30,6 +36,7 @@ interface PageHeaderProps {
 
 export default function PageHeader({ title, buttonText }: PageHeaderProps) {
   const methods = useForm();
+
   const { devicesTypes, updateList } = useDevices();
   const { showSnackbar } = useSnackbar();
 
@@ -52,22 +59,24 @@ export default function PageHeader({ title, buttonText }: PageHeaderProps) {
   };
 
   const onCancelModal = () => {
-    console.log("canceling");
     setIsAddModalOpen(false);
   };
 
   return (
     <>
-      {" "}
       <S.PageTitleWrapper>
-        <h1>{title}</h1>
+        <S.PageTitle>{title}</S.PageTitle>
         <Button
+          variant="info"
           onClick={() => setIsAddModalOpen(true)}
           title={buttonText}
           type="button"
+          tabIndex={0}
+          width={121}
         />
       </S.PageTitleWrapper>
       <Modal
+        title="Add Device"
         width={540}
         height={388}
         isOpen={isAddModalOpen}
@@ -76,7 +85,6 @@ export default function PageHeader({ title, buttonText }: PageHeaderProps) {
       >
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(onAddSubmit)}>
-            <h1>Add device</h1>
             <Input label="System name *" name="system_name" type="text" />
             <Select
               label="Device type *"
@@ -90,7 +98,6 @@ export default function PageHeader({ title, buttonText }: PageHeaderProps) {
               type="number"
             />
             <ModalEditFooter onClose={onCancelModal} />
-            {/* <button>bora</button> */}
           </form>
         </FormProvider>
       </Modal>

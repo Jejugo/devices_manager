@@ -1,9 +1,9 @@
 import Layout from "./layout/Layout/Layout";
 import ListLayout from "./layout/ListLayout/ListLayout";
-import { DevicesProvider } from "./providers/DevicesProvider";
+import { DevicesProvider } from "./providers/DevicesProvider/DevicesProvider";
 import DeviceManager from "./features/DeviceManager/DeviceManager";
 import ErrorBoundary from "./features/ErrorBoundary/ErrorBoundary";
-import SnackbarProvider from "./providers/SnackbarProvider";
+import SnackbarProvider from "./providers/SnackbarProvider/SnackbarProvider";
 
 function App() {
   return (

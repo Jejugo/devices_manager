@@ -4,16 +4,29 @@ import * as S from "./Button.style";
 export default function Button({
   title,
   type,
-  color,
+  variant,
+  tabIndex,
+  width,
+  disabled,
   onClick,
 }: {
   title: string;
-  color?: string;
+  variant?: string;
   type: string;
+  tabIndex?: number;
+  width?: number;
+  disabled?: boolean;
   onClick?: (e: any) => void;
 }) {
   return (
-    <S.Button onClick={onClick} color={color} type={type}>
+    <S.Button
+      onClick={onClick}
+      variant={variant}
+      type={type}
+      tabIndex={tabIndex}
+      width={width}
+      disabled={disabled}
+    >
       {title}
     </S.Button>
   );

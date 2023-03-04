@@ -1,29 +1,48 @@
-import React, { useState } from "react";
 import * as S from "./DropdownFilter.styles";
+import Select from "../Select/Select";
 
-export default function DropdownFilter({
-  title,
-  items,
-  value,
-  onChange,
-}: {
-  title: string;
+interface DropdownProps {
   items: {
     id: string;
     name: string;
+    value: string;
   }[];
   value: string;
-  onChange: (e: any) => void;
-}) {
+  tabIndex?: number;
+  width?: number;
+  description: string;
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+}
+
+export default function DropdownFilter({
+  items,
+  value,
+  width,
+  description,
+  tabIndex,
+  onChange,
+}: DropdownProps) {
   return (
-    <S.DropdownFilter id="sortDropdown" value={value} onChange={onChange}>
-      <option value="All">{title}: All</option>
-      {items.map((item) => (
-        <option
-          key={item.id}
-          value={item.name}
-        >{`${title}: ${item.name}`}</option>
-      ))}
-    </S.DropdownFilter>
+    <S.DropdownFilterContainer>
+      <Select
+        tabIndex={tabIndex}
+        value={value}
+        description={description}
+        onChange={onChange}
+        placeholder="All"
+        items={items}
+        width={width}
+      />
+    </S.DropdownFilterContainer>
   );
 }
+
+// {
+/* <option value="All">{title}: All</option>
+{items.map((item) => (
+  <option
+    key={item.id}
+    value={item.value}
+  >{`${title}: ${item.name}`}</option>
+))} */
+// }

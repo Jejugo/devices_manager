@@ -1,17 +1,45 @@
 import styled from "styled-components";
-
+import { colors, spacing, fonts } from "../../styles";
 interface ButtonProps {
-  color: string;
+  variant: string;
+  fontColor: string;
+  width: number;
 }
 
 export const Button = styled.button<ButtonProps>`
-  background-color: ${(props: ButtonProps) => props.color || "#337ab7"};
-  font-size: 14px;
-  color: ${(props: ButtonProps) =>
-    props.color === "red" ? "#fff" : "#000000"};
-  border: ${(props: ButtonProps) => (props.color === "red" ? "none" : "#eee ")};
-  border-radius: 4px;
-  padding: 12px;
-  width: 121px;
+  background-color: ${(props: ButtonProps) => {
+    switch (props.variant) {
+      case "alert":
+        return colors.alert;
+      case "regular":
+        return colors.regular;
+      case "info":
+        return colors.info;
+    }
+  }};
+  font-size: ${fonts.small}px;
+  color: ${(props: ButtonProps) => {
+    switch (props.variant) {
+      case "alert":
+        return colors.white;
+      case "regular":
+        return colors.black;
+      case "info":
+        return colors.white;
+    }
+  }};
+  border: ${(props: ButtonProps) => {
+    switch (props.variant) {
+      case "alert":
+        return "none";
+      case "regular":
+        return "1px solid black";
+      case "info":
+        return "none";
+    }
+  }};
+  border-radius: ${spacing.radius.medium}px;
+  padding: ${spacing.medium}px ${spacing.medium}px;
+  width: ${(props: ButtonProps) => `${props.width}px` || "auto"};
   cursor: pointer;
 `;

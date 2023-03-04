@@ -6,22 +6,22 @@ interface MenuPositionProp {
     left: number;
   };
 }
-
-export const FloatingMenu = styled.ul`
-  width: 120px;
+export const FloatingMenu = styled.menu`
   background-color: white;
+  position: absolute;
+  padding: 0;
+  top: 20px;
+  right: 10px;
+  z-index: 1;
+  overflow: visible;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+`;
+
+export const FloatingMenuList = styled.ul`
+  width: 120px;
+  list-style: none;
   margin: 0px;
   padding: 0px;
-  position: absolute;
-  top: ${(prop: MenuPositionProp) => {
-    return prop.menuPosition.top;
-  }}px;
-  left: ${(prop: MenuPositionProp) => {
-    return prop.menuPosition.left - 100;
-  }}px;
-  z-index: 1;
   font-size: 14px;
   line-height: 35px;
-  list-style: none;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
 `;

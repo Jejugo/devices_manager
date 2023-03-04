@@ -1,17 +1,20 @@
 import styled from "styled-components";
+import { colors } from "../../styles";
 
 export const ErrorContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  background-color: #f5f5f5;
+  background-color: ${colors.lightGrey};
+  height: 80vh;
 `;
 
 export const ErrorHeading = styled.h1`
-  font-size: 2rem;
+  font-size: 1rem;
   font-weight: bold;
+  width: 50%;
+  text-align: center;
   margin-bottom: 1rem;
 `;
 
@@ -36,4 +39,12 @@ export const ErrorButton = styled.button`
   background-color: #333;
   color: #fff;
   border: none;
+  z-index: 2;
+`;
+
+export const CoffeImage = styled.img`
+  position: absolute;
+  top: 0px;
+  opacity: 0.2;
+  z-index: 1;
 `;

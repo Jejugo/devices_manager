@@ -1,5 +1,6 @@
 import { Component, ErrorInfo, ReactNode, useState } from "react";
 import * as S from "./ErrorBoundary.styles";
+import Layout from "../../layout/Layout/Layout";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -14,15 +15,22 @@ function ErrorFallback(props: { error: Error; onReset: () => void }) {
   const [showDetails, setShowDetails] = useState(false);
 
   return (
-    <S.ErrorContainer>
-      <S.ErrorHeading>Something went wrong</S.ErrorHeading>
-      <S.ErrorMessage>{error.message}</S.ErrorMessage>
-      {showDetails && <S.ErrorStackTrace>{error.stack}</S.ErrorStackTrace>}
-      <S.ErrorButton onClick={() => setShowDetails(!showDetails)}>
-        Toggle details
-      </S.ErrorButton>
-      <S.ErrorButton onClick={onReset}>Try Again</S.ErrorButton>
-    </S.ErrorContainer>
+    <Layout>
+      <S.ErrorContainer>
+        <S.ErrorHeading>
+          Whoops! Looks like someone spilled coffee on the code. We're working
+          on cleaning it up, but in the meantime, please try not to spill
+          anything else on our work!
+        </S.ErrorHeading>
+        <S.CoffeImage src="/img/spilled-coffee-art.png" />
+        <S.ErrorMessage>{error.message}</S.ErrorMessage>
+        {showDetails && <S.ErrorStackTrace>{error.stack}</S.ErrorStackTrace>}
+        <S.ErrorButton onClick={() => setShowDetails(!showDetails)}>
+          Toggle details
+        </S.ErrorButton>
+        <S.ErrorButton onClick={onReset}>Try Again</S.ErrorButton>
+      </S.ErrorContainer>
+    </Layout>
   );
 }
 

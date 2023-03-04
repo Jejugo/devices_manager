@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { colors, radius, spacing } from "../../styles";
 
 export const ListItem = styled.div`
   height: 36px;
@@ -29,24 +30,37 @@ export const ListRow = styled.div`
 export const ItemTitle = styled.div``;
 
 export const ItemMenu = styled.div`
-  margin-right: 12px;
-  width: 32px;
-  height: 32px;
+  position: relative;
+  margin-right: ${spacing.medium}px;
+  width: ${spacing.xlarge}px;
+  height: ${spacing.xlarge}px;
   cursor: pointer;
-  background-color: #e8e8ea;
+  background-color: ${colors.grey};
+  border-radius: ${radius.small}px;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &:children {
+    cursor: pointer;
+  }
 `;
 
-export const FloatingMenuItem = styled.li`
-  cursor: pointer;
-`;
+export const FloatingMenuItem = styled.li``;
 
 export const FloatingMenuItemAnchor = styled.a`
   padding-left: 10px;
   display: block;
   &:hover {
-    background-color: #eee;
+    background-color: ${colors.lightGrey};
   }
+`;
+
+export const TitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export const SystemLogo = styled.img`
+  margin-right: 6.5px;
 `;

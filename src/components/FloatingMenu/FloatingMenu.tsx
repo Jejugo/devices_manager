@@ -7,13 +7,13 @@ export interface MenuPosition {
 }
 
 export default function FloatingMenu({
-  menuPosition,
   children,
 }: {
-  menuPosition: MenuPosition;
   children: React.ReactNode;
 }) {
   return (
-    <S.FloatingMenu menuPosition={menuPosition}>{children}</S.FloatingMenu>
+    <S.FloatingMenu role="menu">
+      <S.FloatingMenuList>{children}</S.FloatingMenuList>
+    </S.FloatingMenu>
   );
 }

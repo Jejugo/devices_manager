@@ -1,29 +1,26 @@
-import React from "react";
+import React, { useRef } from "react";
 import * as S from "./Input.styles";
-import { useController } from "react-hook-form";
 
-interface IInput {
-  value?: string;
+interface FormInputProps {
   type?: string;
+  value: string;
   name: string;
-  onChange?: (value: string) => void;
-  label?: string;
-  placeholder?: string;
+  ref?: React.MutableRefObject<any>;
+  onChange: (e: any) => void;
 }
 
-export default function Input({ label, type, name }: IInput) {
-  const {
-    field: { ...fieldProps },
-    fieldState,
-  } = useController({ name, rules: { required: true } });
+export const FormInput = React.forwardRef(
+  ({ type, value, onChange, name }: FormInputProps, ref) => {
+    return (
+      <S.Input
+        type={type}
+        value={value}
+        onChange={onChange}
+        name={name}
+        ref={ref}
+      ></S.Input>
+    );
+  }
+);
 
-  return (
-    <S.InputContainer>
-      <S.Label>{label}</S.Label>
-      <S.Input type={type} {...fieldProps}></S.Input>
-      <S.ErrorMessage>
-        {fieldState.error ? "This field is required" : null}
-      </S.ErrorMessage>
-    </S.InputContainer>
-  );
-}
+export default FormInput;
