@@ -1,22 +1,27 @@
 import styled from "styled-components";
-import { colors, radius, spacing } from "../../styles";
+import { colors, fonts, radius, spacing } from "../../styles";
+import { ThemeProps } from "../../styles/themes";
 
-export const ListItem = styled.div`
+export const ListItem = styled.section`
   height: 36px;
-  padding: 8px 0px 8px 13px;
+  padding: ${spacing.small}px 0px ${spacing.small}px ${spacing.medium}px;
   border-bottom: 1px #e7e8eb solid;
   &:hover {
-    background-color: #f4f4f5;
+    background-color: ${colors.lightGrey};
+
+    h2 {
+      color: ${(props: ThemeProps) => props.theme.listItem.hover.color};
+    }
   }
 `;
 
 export const ListTitle = styled.h2`
-  font-size: 14px;
+  font-size: ${fonts.small}px;
   margin: 0;
 `;
 
 export const ListSubtitle = styled.p`
-  font-size: 12px;
+  font-size: ${fonts.xsmall}px;
   margin: 0;
   color: #6e6d7a;
 `;
@@ -49,7 +54,7 @@ export const ItemMenu = styled.div`
 export const FloatingMenuItem = styled.li``;
 
 export const FloatingMenuItemAnchor = styled.a`
-  padding-left: 10px;
+  padding-left: ${spacing.small}px;
   display: block;
   &:hover {
     background-color: ${colors.lightGrey};
@@ -62,5 +67,12 @@ export const TitleContainer = styled.div`
 `;
 
 export const SystemLogo = styled.img`
-  margin-right: 6.5px;
+  margin-right: ${spacing.small}px;
 `;
+
+export const ButtonWrapper = styled.div`
+  width: 131px;
+  display: flex;
+  justify-content: flex-end;
+  gap: ${spacing.small}px;
+`

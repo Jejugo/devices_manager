@@ -5,7 +5,8 @@ import SnackbarProvider from "../../providers/SnackbarProvider/SnackbarProvider"
 import PageHeader from "./PageHeader";
 import { sendRequest } from "../../service";
 import { colors } from "../../styles";
-import { FormProvider, useForm } from "react-hook-form";
+import { lightTheme } from "../../styles/themes";
+import { ThemeProvider } from 'styled-components'
 
 jest.mock("../../service", () => ({
   sendRequest: jest.fn(),
@@ -13,11 +14,13 @@ jest.mock("../../service", () => ({
 
 const PageHeaderWithWrapper = () => {
   return (
+    <ThemeProvider theme={lightTheme}>
     <DevicesProvider>
       <SnackbarProvider>
         <PageHeader title="Test Title" buttonText="Test Button Text" />
       </SnackbarProvider>
     </DevicesProvider>
+    </ThemeProvider>
   );
 };
 
@@ -30,7 +33,11 @@ describe("PageHeader component", () => {
   it("renders the correct title and button text", () => {
     const title = "Test Title";
     const buttonText = "Test Button Text";
-    render(<PageHeader title={title} buttonText={buttonText} />);
+    render(
+      <ThemeProvider theme={lightTheme}>
+        <PageHeader title={title} buttonText={buttonText} />
+      </ThemeProvider>);
+
     expect(screen.getByText(title)).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "Test Button Text" })
@@ -38,9 +45,11 @@ describe("PageHeader component", () => {
   });
 
   it("opens and closes the add device modal when clicking the button", async () => {
-    render(<PageHeader title={title} buttonText={buttonText} />);
-
-    ////////////////////////////////
+    render(
+      <ThemeProvider theme={lightTheme}>
+        <PageHeader title={title} buttonText={buttonText} />
+        </ThemeProvider>
+      );
 
     const button = screen.getByText(buttonText);
     expect(button).toBeInTheDocument();
@@ -96,7 +105,7 @@ describe("PageHeader component", () => {
       });
     });
 
-    it("Should add with an error", async () => {
+    it("Should add with an 500 as a response", async () => {
       const expectedResponse = {
         status: 500,
         data: {
@@ -105,6 +114,41 @@ describe("PageHeader component", () => {
       };
 
       sendRequestMock.mockResolvedValue(expectedResponse);
+
+      render(<PageHeaderWithWrapper />);
+
+      const menuButton = screen.getByText(buttonText);
+      userEvent.click(menuButton);
+
+      const systemNameInput = screen.getByRole("textbox");
+      expect(systemNameInput).toBeInTheDocument();
+      const inputText = "TestValue";
+      userEvent.type(systemNameInput, inputText);
+
+      const dropdown = screen.getByRole("combobox");
+      expect(dropdown).toBeInTheDocument();
+      userEvent.selectOptions(dropdown, "windows");
+
+      const hddCapacityInput = screen.getByRole("spinbutton");
+      expect(hddCapacityInput).toBeInTheDocument();
+      const hddCapacityText = "555";
+      userEvent.type(hddCapacityInput, hddCapacityText);
+
+      const confirmButton = await screen.findByText("Submit");
+      userEvent.click(confirmButton);
+
+      await waitFor(() => {
+        const snackbar = screen.queryByTestId("snackbar");
+        expect(snackbar).toHaveStyle({ backgroundColor: colors.alert });
+      });
+    });
+    it("Should add with an 700 as a response", async () => {
+      const error = {
+        message: 'There was an error'
+      };
+
+
+      sendRequestMock.mockRejectedValue(error);
 
       render(<PageHeaderWithWrapper />);
 

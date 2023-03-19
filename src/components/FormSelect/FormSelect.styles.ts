@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { spacing } from "../../styles";
+import { fonts, radius, spacing } from "../../styles";
+import { ThemeProps } from "../../styles/themes";
 
 export const SelectContainer = styled.div`
   display: flex;
@@ -8,5 +9,12 @@ export const SelectContainer = styled.div`
 `;
 
 export const Label = styled.label`
-  margin-bottom: 4px;
+  margin-bottom: ${radius.small}px;
+  color: ${(props: ThemeProps) => props.theme.color}
+`;
+
+export const ErrorMessage = styled.p`
+  margin: 0;
+  color: red;
+  font-size: ${fonts.xsmall}px;
 `;

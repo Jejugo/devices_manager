@@ -62,9 +62,7 @@ export default function useDeviceFilter(): DeviceFilter {
         filteredDevices.sort(
           (a, b) => parseInt(b.hdd_capacity) - parseInt(a.hdd_capacity)
         );
-        break;
-      default:
-        console.warn(`Invalid sorting type: ${sortingType}`);
+        break;        
     }
 
     setFiltered(filteredDevices);

@@ -5,7 +5,6 @@ export default function Button({
   title,
   type,
   variant,
-  tabIndex,
   width,
   disabled,
   onClick,
@@ -13,17 +12,15 @@ export default function Button({
   title: string;
   variant?: string;
   type: string;
-  tabIndex?: number;
   width?: number;
   disabled?: boolean;
-  onClick?: (e: any) => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }) {
   return (
     <S.Button
       onClick={onClick}
       variant={variant}
       type={type}
-      tabIndex={tabIndex}
       width={width}
       disabled={disabled}
     >

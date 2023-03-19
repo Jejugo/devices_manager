@@ -1,5 +1,7 @@
 import styled from "styled-components";
-import { fonts } from "../../styles";
+import { fonts, radius, spacing } from "../../styles";
+import { ThemeProps } from "../../styles/themes";
+import media from "../../styles/media";
 
 interface ModalOverlayProps {
   isOpen: boolean;
@@ -23,56 +25,33 @@ export const ModalOverlay = styled.div<ModalOverlayProps>`
   }
 `;
 
-interface ModalContainerProps {
-  mobileFullSize: boolean;
-  width: number;
-}
-
-const mobileMarginBottom = "60px";
-
-export const ModalContainer = styled.div<ModalContainerProps>`
+export const ModalContainer = styled.div<ThemeProps>`
   @media screen {
-    max-height: ${({
-      mobileFullSize,
-      height,
-    }: {
-      mobileFullSize: boolean;
-      height: number;
-    }) => (mobileFullSize ? "100vh" : `auto`)};
-    max-width: ${({
-      mobileFullSize,
-      width,
-    }: {
-      mobileFullSize: boolean;
-
-      width: number;
-    }) => (mobileFullSize ? "100vw" : `auto`)};
-    width: ${({
-      mobileFullSize,
-      width,
-    }: {
-      mobileFullSize: boolean;
-
-      width: number;
-    }) => (mobileFullSize ? "100vw" : `auto`)};
-    height: ${({
-      mobileFullSize,
-      height,
-    }: {
-      mobileFullSize: boolean;
-      height: number;
-    }) => (mobileFullSize ? "100vh" : `auto`)};
-    padding: 24px;
-    border-radius: 8px;
+    max-height: auto;
+    max-width: auto;
+    width: auto;
+    height: auto;
+    padding: ${spacing.large}px;
+    border-radius: ${radius.small}px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     position: relative;
-    background-color: #fff;
+    background-color: ${(props: ThemeProps) => props.theme.modal.backgroundColor};
     color: #545454;
     line-height: 20px;
-    margin-bottom: ${mobileMarginBottom};
   }
+
+  ${media.md`
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-height: 100vh;
+    max-width:  100vw;
+    width: 100vw;
+    height: 100vh;
+  `}
+  
 `;
 
 interface BodyProps {
@@ -91,11 +70,10 @@ export const Body = styled.div<BodyProps>`
     overflow-y: auto;
   }
 
-  @media (max-width: 480px) {
+
+  ${media.sm`
     width: 100%;
-    ${({ mobileFullSize }: { mobileFullSize: boolean }) =>
-      mobileFullSize && "height: 100vh;"}
-  }
+  `}
 
   @media print {
     overflow: visible;
@@ -153,8 +131,14 @@ export const ScrollSection = styled.section`
 
 ScrollSection.displayName = "ScrollSection";
 
+
 export const ModalTitle = styled.h1`
   font-size: ${fonts.large}px;
-  padding-top: 8px;
-  margin-bottom: 24px;
+  padding-top: ${spacing.small}px;
+  margin-bottom: ${spacing.large}px;
+  color: ${(props: ThemeProps) => props.theme.color}
 `;
+
+export const ModalText = styled.p`
+  color: ${(props: ThemeProps) => props.theme.color}
+`

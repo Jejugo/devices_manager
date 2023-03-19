@@ -1,6 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Select from "./Select";
+import { lightTheme } from "../../styles/themes";
+import { ThemeProvider } from 'styled-components'
 
 const items = [
   { id: "1", name: "Option 1", value: "option1" },
@@ -11,9 +13,9 @@ const items = [
 it("renders select with correct props", () => {
   const mockOnChange = jest.fn();
   render(
+    <ThemeProvider theme={lightTheme}>
     <Select
       value="option1"
-      tabIndex={1}
       placeholder="Select an option"
       description="Choose an option"
       items={items}
@@ -21,11 +23,11 @@ it("renders select with correct props", () => {
       width={200}
       height={40}
     />
+    </ThemeProvider>
   );
 
   const select = screen.getByRole("combobox");
   expect(select).toBeInTheDocument();
-  expect(select).toHaveAttribute("tabIndex", "1");
   expect(select).toHaveValue("option1");
   expect(
     screen.getByText("Choose an option: Select an option")

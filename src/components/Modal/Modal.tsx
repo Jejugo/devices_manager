@@ -36,7 +36,7 @@ const Modal: FunctionComponent<ModalProps> = ({
         >
           <S.ModalTitle>{title}</S.ModalTitle>
           <S.CloseButton onClick={onCloseButton} src="icons/CloseIcon.svg" />
-          {text && <p>{text}</p>}
+          {text && <S.ModalText>{text}</S.ModalText>}
           {children && (
             <S.Body width={width - 60} mobileFullSize={mobileFullSize}>
               {children}

@@ -1,5 +1,5 @@
-import { ReactElement, useEffect, useRef, useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { useEffect, useRef, useState } from "react";
+import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import * as S from "./ListItem.styles";
 import FloatingMenu from "../FloatingMenu/FloatingMenu";
 import Modal from "../Modal/Modal";
@@ -10,6 +10,7 @@ import FormSelect from "../FormSelect/FormSelect";
 import { useDevices } from "../../providers/DevicesProvider/DevicesProvider";
 import { useSnackbar } from "../../providers/SnackbarProvider/SnackbarProvider";
 import ModalFooter from "../Modal/ModalFooter/ModalFooter";
+import { Flexbox } from "../../styles/common";
 
 interface IFormState {
   system_name: string;
@@ -25,6 +26,7 @@ interface ModalDeleteFooterProps {
 const ModalDeleteFooter = ({ onClose, onSave }: ModalDeleteFooterProps) => {
   return (
     <ModalFooter>
+      <S.ButtonWrapper>
       <Button
         onClick={onClose}
         variant="regular"
@@ -32,6 +34,7 @@ const ModalDeleteFooter = ({ onClose, onSave }: ModalDeleteFooterProps) => {
         type="button"
       />
       <Button onClick={onSave} variant="alert" title="delete" type="button" />
+      </S.ButtonWrapper>
     </ModalFooter>
   );
 };
@@ -44,13 +47,15 @@ interface ModalEditFooterProps {
 const ModalEditFooter = ({ onClose, isDirty }: ModalEditFooterProps) => {
   return (
     <ModalFooter>
-      <Button
-        onClick={onClose}
-        variant="regular"
-        title="Cancel"
-        type="button"
-      />
-      <Button type="submit" variant="info" title="Submit" disabled={!isDirty} />
+      <S.ButtonWrapper>
+        <Button
+          onClick={onClose}
+          variant="regular"
+          title="Cancel"
+          type="button"
+        />
+        <Button type="submit" variant="info" title="Submit" disabled={!isDirty} />
+      </S.ButtonWrapper>
     </ModalFooter>
   );
 };
@@ -73,7 +78,7 @@ export default function ListItem({ item }: { item: Device }) {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
-
+  
   useEffect(() => {
     const handleClickOutside = (event: any) => {
       if (
@@ -91,12 +96,12 @@ export default function ListItem({ item }: { item: Device }) {
     };
   }, [listItemRef]);
 
-  const openEditModal = (e: any) => {
+  const openEditModal = () => {
     setIsMenuOpen(false);
     setIsEditModalOpen(true);
   };
 
-  const openDeleteModal = (e: ReactElement<HTMLAnchorElement>) => {
+  const openDeleteModal = () => {
     setIsMenuOpen(false);
     setIsDeleteModalOpen(true);
   };
@@ -106,37 +111,47 @@ export default function ListItem({ item }: { item: Device }) {
   };
 
   const onDeleteConfirm = async () => {
-    const response = await sendRequest({
-      url: `devices/${item.id}`,
-      method: "DELETE",
-    });
-    if (response.status !== 200) {
-      showSnackbar("Something went wrong.", "ERROR");
+    try {
+      const response = await sendRequest({
+        url: `devices/${item.id}`,
+        method: "DELETE",
+      });
+      if (response.status !== 200) {
+        showSnackbar("Something went wrong.", "ERROR");
+        setIsDeleteModalOpen(false);
+        return;
+      }
+  
+      showSnackbar("Item deleted successfully", "SUCCESS");
+      updateList();
       setIsDeleteModalOpen(false);
-      return;
     }
-
-    showSnackbar("Item deleted successfully", "SUCCESS");
-    updateList();
-    setIsDeleteModalOpen(false);
+    catch(err){
+      showSnackbar("Something went wrong.", "ERROR");
+    }
   };
 
-  const onSubmitEdit = async (data: any) => {
-    const response = await sendRequest({
-      url: `devices/${item.id}`,
-      method: "PUT",
-      data,
-    });
-
-    if (response.status !== 200) {
-      showSnackbar("Something went wrong", "ERROR");
-      setIsDeleteModalOpen(false);
-      return;
+  const onSubmitEdit = async (data: FieldValues) => {
+    try {
+      const response = await sendRequest({
+        url: `devices/${item.id}`,
+        method: "PUT",
+        data,
+      });
+  
+      if (response.status !== 200) {
+        showSnackbar("Something went wrong", "ERROR");
+        setIsDeleteModalOpen(false);
+        return;
+      }
+  
+      updateList();
+      showSnackbar("Item edited successfully", "SUCCESS");
+      setIsEditModalOpen(false);
     }
-
-    updateList();
-    showSnackbar("Item edited successfully", "SUCCESS");
-    setIsEditModalOpen(false);
+    catch(err){
+      showSnackbar("Something went wrong", "ERROR");
+    }
   };
 
   const onCancelModal = () => {
@@ -146,12 +161,12 @@ export default function ListItem({ item }: { item: Device }) {
   return (
     <>
       <S.ListItem>
-        <S.ListRow>
+        <Flexbox alignItems="center" justifyContent="space-between">
           <S.ItemTitle>
-            <S.TitleContainer>
+            <Flexbox alignItems="center">
               <S.SystemLogo src={`icons/${item.type.toLowerCase()}.svg`} />
               <S.ListTitle>{item.system_name}</S.ListTitle>
-            </S.TitleContainer>
+            </Flexbox>
             <S.ListSubtitle>
               {item.type} workstation - {item.hdd_capacity} GB
             </S.ListSubtitle>
@@ -171,7 +186,7 @@ export default function ListItem({ item }: { item: Device }) {
               </FloatingMenu>
             ) : null}
           </S.ItemMenu>
-        </S.ListRow>
+        </Flexbox>
       </S.ListItem>
       <Modal
         title="Delete device?"

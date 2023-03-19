@@ -1,5 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import List from "./List";
+import { lightTheme } from "../../styles/themes";
+import { ThemeProvider } from 'styled-components'
 
 const MOCK_OBJECT = [
   {
@@ -79,7 +81,7 @@ const MOCK_OBJECT = [
 describe("List component", () => {
   const items = MOCK_OBJECT;
   it("renders the list of devices", () => {
-    render(<List items={items} />);
+    render(<ThemeProvider theme={lightTheme}><List items={items} /></ThemeProvider>);
     // Check if the title is rendered
     expect(screen.getByText("Device")).toBeInTheDocument();
     // Check if the separation line is rendered

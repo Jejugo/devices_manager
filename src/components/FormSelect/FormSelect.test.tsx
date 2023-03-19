@@ -1,8 +1,9 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import FormSelect from "./FormSelect";
 import { FormProvider, useForm } from "react-hook-form";
-import userEvent from "@testing-library/user-event";
 import { sortingTypes } from "../../providers/DevicesProvider/constants";
+import { ThemeProvider } from 'styled-components'
+import { lightTheme } from "../../styles/themes";
 
 const WithFormProvider = ({ children }: { children: React.ReactNode }) => {
   const methods = useForm({
@@ -10,13 +11,13 @@ const WithFormProvider = ({ children }: { children: React.ReactNode }) => {
       input_1: "",
     },
   });
-  const onSubmit = (data: any) => {
-    console.log("submitting: ", data);
-  };
+
   return (
+    <ThemeProvider theme={lightTheme}>
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)}>{children}</form>
+      <form>{children}</form>
     </FormProvider>
+    </ThemeProvider>
   );
 };
 

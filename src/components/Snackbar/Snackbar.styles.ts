@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { colors, fonts } from "../../styles";
+import { colors, fonts, radius } from "../../styles";
 
 type Variant = "SUCCESS" | "ERROR" | "WARNING";
 
@@ -43,7 +43,7 @@ export const Snackbar = styled.div<SnackbarStyle>`
   font-size: ${fonts.medium}px;
   font-weight: bold;
   padding: 16px 32px;
-  border-radius: 4px;
+  border-radius: ${radius.small}px;
   z-index: 9999;
   opacity: ${(props: SnackbarStyle) => (props.show ? 1 : 0)};
   transition: 0.5s ease;

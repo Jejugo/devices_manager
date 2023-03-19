@@ -1,6 +1,8 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import ErrorBoundary from "./ErrorBoundary";
+import { lightTheme } from "../../styles/themes";
+import { ThemeProvider } from 'styled-components'
 
 describe("ErrorBoundary component", () => {
   const ChildComponent = () => {
@@ -9,9 +11,11 @@ describe("ErrorBoundary component", () => {
 
   it("renders fallback UI when an error is thrown", () => {
     render(
+      <ThemeProvider theme={lightTheme}>
       <ErrorBoundary>
         <ChildComponent />
       </ErrorBoundary>
+      </ThemeProvider>
     );
     expect(
       screen.getByText(
@@ -23,9 +27,11 @@ describe("ErrorBoundary component", () => {
 
   it("toggles error details when toggle details button is clicked", async () => {
     render(
+      <ThemeProvider theme={lightTheme}>
       <ErrorBoundary>
         <ChildComponent />
       </ErrorBoundary>
+      </ThemeProvider>
     );
 
     expect(screen.getByText(/Test error/i)).toBeInTheDocument();

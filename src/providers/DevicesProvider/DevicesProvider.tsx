@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect, createContext } from "react";
 import { sendRequest } from "../../service";
 import { sortingTypes, devicesTypes } from "./constants";
+import { useSnackbar } from "../SnackbarProvider/SnackbarProvider";
 
 export type DropdownItem = {
   id: string;
@@ -30,14 +31,20 @@ export function useDevices() {
 
 export function DevicesProvider({ children }: { children: React.ReactNode }) {
   const [devices, setDevices] = useState<Device[]>([]);
+  const { showSnackbar } = useSnackbar();
 
   const getDevices = async () => {
-    const { data: devices } = await sendRequest({
-      url: "devices",
-      method: "GET",
-    });
-
-    setDevices(devices);
+    try {
+      const { data: devices } = await sendRequest({
+        url: "devices",
+        method: "GET",
+      });
+  
+      setDevices(devices);
+    }
+    catch(err){
+      showSnackbar("Something went wrong.", "ERROR");
+    }
   };
 
   useEffect(() => {

@@ -8,7 +8,6 @@ interface DropdownProps {
     value: string;
   }[];
   value: string;
-  tabIndex?: number;
   width?: number;
   description: string;
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
@@ -19,13 +18,12 @@ export default function DropdownFilter({
   value,
   width,
   description,
-  tabIndex,
   onChange,
 }: DropdownProps) {
   return (
+
     <S.DropdownFilterContainer>
       <Select
-        tabIndex={tabIndex}
         value={value}
         description={description}
         onChange={onChange}

@@ -5,6 +5,8 @@ import { DevicesProvider } from "../../providers/DevicesProvider/DevicesProvider
 import SnackbarProvider from "../../providers/SnackbarProvider/SnackbarProvider";
 import { sendRequest } from "../../service";
 import { colors } from "../../styles";
+import { lightTheme } from "../../styles/themes";
+import { ThemeProvider } from 'styled-components'
 
 jest.mock("../../service", () => ({
   sendRequest: jest.fn(),
@@ -21,18 +23,28 @@ const sendRequestMock = sendRequest as jest.Mocked<any>;
 
 const ListItemWithWrapper = () => {
   return (
+    <ThemeProvider theme={lightTheme}>
     <DevicesProvider>
       <SnackbarProvider>
         <ListItem item={mockDevice} />
       </SnackbarProvider>
     </DevicesProvider>
+    </ThemeProvider>
   );
 };
+
+const ListItemComponent = () => {
+  return (
+    <ThemeProvider theme={lightTheme}>
+      <ListItem item={mockDevice} />
+    </ThemeProvider>
+  )
+}
 
 describe("ListItem", () => {
   describe("When clicking on the menu icon", () => {
     it("Should open the floating menu", async () => {
-      render(<ListItem item={mockDevice} />);
+      render(<ListItemComponent/>);
 
       const menuButton = screen.getByAltText("More");
       userEvent.click(menuButton);
@@ -44,7 +56,8 @@ describe("ListItem", () => {
     ["Edit", "Delete"].forEach((item) => {
       describe(`And clicking on the item: ${item}`, () => {
         it(`clicking on the ${item.toLowerCase()} menu item opens the ${item.toLowerCase()} modal and closes when cancel is clicked`, async () => {
-          render(<ListItem item={mockDevice} />);
+          render(<ListItemComponent/>);
+
           const moreButton = "More";
           const deleteModalTitle = "Delete device?";
           const editModalTitle = "Edit device";
@@ -73,7 +86,8 @@ describe("ListItem", () => {
 
   describe("When clicking outside the menu container", () => {
     it("Should remove menu from screen", async () => {
-      render(<ListItem item={mockDevice} />);
+      render(<ListItemComponent/>);
+
 
       const menuButton = screen.getByAltText("More");
       userEvent.click(menuButton);
@@ -91,7 +105,8 @@ describe("ListItem", () => {
   describe("When clicking on the Delete item on the menu", () => {
     describe("And canceling the operation", () => {
       it("Should remove the Edit modal from the screen", async () => {
-        render(<ListItem item={mockDevice} />);
+        render(<ListItemComponent/>);
+
 
         const menuButton = screen.getByAltText("More");
         userEvent.click(menuButton);
@@ -137,7 +152,7 @@ describe("ListItem", () => {
         });
       });
 
-      it("Should make the request but fail if there's an error", async () => {
+      it("Should make the request but request returns 500", async () => {
         const expectedResponse = {
           status: 500,
           data: {
@@ -164,13 +179,39 @@ describe("ListItem", () => {
           expect(snackbar).toHaveStyle({ backgroundColor: colors.alert });
         });
       });
+
+      it("Should make the request but throws an error", async () => {
+        const error = {
+          message: 'There was an error'
+        };
+
+        sendRequestMock.mockRejectedValue(error);
+
+        render(<ListItemWithWrapper />);
+
+        const menuButton = screen.getByAltText("More");
+        userEvent.click(menuButton);
+
+        const editMenuItem = await screen.findByText("Delete");
+        userEvent.click(editMenuItem);
+
+        const confirmButton = await screen.findByText("delete");
+        userEvent.click(confirmButton);
+
+        const snackbar = screen.queryByTestId("snackbar");
+        expect(snackbar).toBeInTheDocument();
+        await waitFor(() => {
+          expect(snackbar).toHaveStyle({ backgroundColor: colors.alert });
+        });
+      });
     });
   });
 
   describe("When clicking on the Edit item on the menu", () => {
     describe("And canceling the operation", () => {
       it("Should remove the Edit modal from the screen", async () => {
-        render(<ListItem item={mockDevice} />);
+        render(<ListItemComponent/>);
+
 
         const menuButton = screen.getByAltText("More");
         userEvent.click(menuButton);

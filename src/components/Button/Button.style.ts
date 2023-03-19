@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { colors, spacing, fonts } from "../../styles";
+import { colors, spacing, fonts, radius } from "../../styles";
 interface ButtonProps {
   variant: string;
   fontColor: string;
@@ -38,8 +38,8 @@ export const Button = styled.button<ButtonProps>`
         return "none";
     }
   }};
-  border-radius: ${spacing.radius.medium}px;
-  padding: ${spacing.medium}px ${spacing.medium}px;
-  width: ${(props: ButtonProps) => `${props.width}px` || "auto"};
+  border-radius: ${radius.small}px;
+  padding: ${spacing.medium}px 0px;
+  width: 100%;
   cursor: pointer;
 `;

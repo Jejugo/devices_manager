@@ -37,7 +37,9 @@ export default function FormSelect({
         height={38}
         {...fieldProps}
       />
+      <S.ErrorMessage>
       {fieldState.error ? "This field is required" : null}
+      </S.ErrorMessage>
     </S.SelectContainer>
   );
 }

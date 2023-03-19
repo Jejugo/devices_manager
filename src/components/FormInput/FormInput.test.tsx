@@ -1,7 +1,9 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import FormInput from "./FormInput";
-import { FormProvider, useForm } from "react-hook-form";
+import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import userEvent from "@testing-library/user-event";
+import { lightTheme } from "../../styles/themes";
+import { ThemeProvider } from 'styled-components'
 
 const WithFormProvider = ({ children }: { children: React.ReactNode }) => {
   const methods = useForm({
@@ -9,13 +11,15 @@ const WithFormProvider = ({ children }: { children: React.ReactNode }) => {
       input_1: "",
     },
   });
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: FieldValues) => {
     console.log("submitting: ", data);
   };
   return (
+    <ThemeProvider theme={lightTheme}>
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>{children}</form>
     </FormProvider>
+    </ThemeProvider>
   );
 };
 
@@ -31,10 +35,6 @@ describe("Input component", () => {
     const inputElement = screen.getByRole("textbox", { name: "" });
     expect(labelElement).toBeInTheDocument();
     expect(inputElement).toBeInTheDocument();
-    // const inputElement = screen.getByRole("textbox", { name: "Name" });
-    // screen.debug();
-    // expect(labelElement).toBeInTheDocument();
-    // expect(inputElement).toBeInTheDocument();
   });
 
   it("displays error message when input is invalid", async () => {

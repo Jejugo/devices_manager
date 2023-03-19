@@ -1,13 +1,9 @@
 import styled from "styled-components";
+import { fonts } from "../../styles";
+import { ThemeProps } from "../../styles/themes";
 
-interface MenuPositionProp {
-  menuPosition: {
-    top: number;
-    left: number;
-  };
-}
 export const FloatingMenu = styled.menu`
-  background-color: white;
+  background-color: ${(props: ThemeProps) => props.theme.backgroundColor};
   position: absolute;
   padding: 0;
   top: 20px;
@@ -15,6 +11,7 @@ export const FloatingMenu = styled.menu`
   z-index: 1;
   overflow: visible;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+  color: ${(props: ThemeProps) => props.theme.color}
 `;
 
 export const FloatingMenuList = styled.ul`
@@ -22,6 +19,6 @@ export const FloatingMenuList = styled.ul`
   list-style: none;
   margin: 0px;
   padding: 0px;
-  font-size: 14px;
+  font-size: ${fonts.small}px;
   line-height: 35px;
 `;

@@ -24,7 +24,7 @@ export default function DeviceManager() {
   return (
     <div data-testid="device-manager">
       <S.Filters>
-        <SearchBar onChange={handleSearchbar} tabIndex={1} />
+        <SearchBar onChange={handleSearchbar} />
         <DropdownFilter
           width={200}
           onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
@@ -33,7 +33,6 @@ export default function DeviceManager() {
           value={deviceType}
           items={devicesTypes}
           description="Device Type"
-          tabIndex={2}
         />
         <DropdownFilter
           width={291}
@@ -43,7 +42,6 @@ export default function DeviceManager() {
           value={sortingType}
           items={sortingTypes}
           description="Sort By"
-          tabIndex={3}
         />
       </S.Filters>
       <List items={filteredDevices} />

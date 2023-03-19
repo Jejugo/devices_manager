@@ -2,14 +2,22 @@ import Button from "../Button/Button";
 
 import * as S from "./PageHeader.styles";
 import Modal from "../Modal/Modal";
-import { FormProvider, useForm } from "react-hook-form";
-import Input from "../FormInput/FormInput";
-import Select from "../FormSelect/FormSelect";
+import { FieldValues, FormProvider, useForm } from "react-hook-form";
+import FormSelect from "../FormSelect/FormSelect";
 import { useState } from "react";
 import { useDevices } from "../../providers/DevicesProvider/DevicesProvider";
 import { useSnackbar } from "../../providers/SnackbarProvider/SnackbarProvider";
 import { sendRequest } from "../../service";
 import ModalFooter from "../Modal/ModalFooter/ModalFooter";
+import { useDevice } from "../../providers/DeviceProvider/DeviceProvider";
+import FormInput from "../FormInput/FormInput";
+
+interface FormState {
+  system_name: string;
+  type: string;
+  hdd_capacity: string;
+}
+
 
 interface ModalAddFooterProps {
   onClose: () => void;
@@ -18,13 +26,15 @@ interface ModalAddFooterProps {
 const ModalEditFooter = ({ onClose }: ModalAddFooterProps) => {
   return (
     <ModalFooter>
-      <Button
-        onClick={onClose}
-        variant="regular"
-        title="Cancel"
-        type="button"
-      />
-      <Button type="submit" variant="info" title="Submit" />
+      <S.ButtonWrapper>
+        <Button
+          onClick={onClose}
+          variant="regular"
+          title="Cancel"
+          type="button"
+        />
+        <Button type="submit" variant="info" title="Submit" />
+      </S.ButtonWrapper>
     </ModalFooter>
   );
 };
@@ -35,27 +45,40 @@ interface PageHeaderProps {
 }
 
 export default function PageHeader({ title, buttonText }: PageHeaderProps) {
-  const methods = useForm();
+  const methods = useForm<FormState>({
+    defaultValues: {
+      system_name: '',
+      type: '',
+      hdd_capacity: '',
+    },
+  });
+  const { deviceType } = useDevice();
 
   const { devicesTypes, updateList } = useDevices();
   const { showSnackbar } = useSnackbar();
 
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
 
-  const onAddSubmit = async (data: any) => {
-    const response = await sendRequest({
-      url: "devices",
-      method: "POST",
-      data,
-    });
-    if (response.status !== 200) {
-      showSnackbar("Something went wrong", "ERROR");
+  const onAddSubmit = async (data: FieldValues) => {
+    try {
+      const response = await sendRequest({
+        url: "devices",
+        method: "POST",
+        data,
+      });
+      if (response.status !== 200) {
+        showSnackbar("Something went wrong", "ERROR");
+        setIsAddModalOpen(false);
+        return;
+      }
+      updateList();
+      showSnackbar("Item added successfully", "SUCCESS");
       setIsAddModalOpen(false);
-      return;
+      methods.reset()
     }
-    updateList();
-    showSnackbar("Item added successfully", "SUCCESS");
-    setIsAddModalOpen(false);
+    catch(err){
+      showSnackbar("Something went wrong", "ERROR");
+    }
   };
 
   const onCancelModal = () => {
@@ -66,14 +89,14 @@ export default function PageHeader({ title, buttonText }: PageHeaderProps) {
     <>
       <S.PageTitleWrapper>
         <S.PageTitle>{title}</S.PageTitle>
-        <Button
-          variant="info"
-          onClick={() => setIsAddModalOpen(true)}
-          title={buttonText}
-          type="button"
-          tabIndex={0}
-          width={121}
-        />
+        <S.AddDeviceWrapper width={deviceType === 'mobile' ? '100%' : '121px'}>
+          <Button
+            variant="info"
+            onClick={() => setIsAddModalOpen(true)}
+            title={buttonText}
+            type="button"
+          />
+        </S.AddDeviceWrapper>
       </S.PageTitleWrapper>
       <Modal
         title="Add Device"
@@ -85,14 +108,14 @@ export default function PageHeader({ title, buttonText }: PageHeaderProps) {
       >
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(onAddSubmit)}>
-            <Input label="System name *" name="system_name" type="text" />
-            <Select
+            <FormInput label="System name *" name="system_name" type="text" />
+            <FormSelect
               label="Device type *"
               name="type"
-              placeholder="Choose a device type"
+              placeholder="Select type"
               items={devicesTypes}
             />
-            <Input
+            <FormInput
               label="HDD capacity (GB) *"
               name="hdd_capacity"
               type="number"

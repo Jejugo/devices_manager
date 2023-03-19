@@ -3,7 +3,6 @@ import * as S from "./Select.styles";
 
 interface SelectProps {
   value: string;
-  tabIndex?: number;
   placeholder: string;
   description?: string;
   width?: number;
@@ -20,7 +19,6 @@ interface SelectProps {
 export const Select = React.forwardRef(
   (
     {
-      tabIndex,
       value,
       onChange,
       height,
@@ -33,16 +31,14 @@ export const Select = React.forwardRef(
   ) => {
     return (
       <S.Select
-        tabIndex={tabIndex}
-        value={value}
+        value={value === '' ? placeholder : value}
         onChange={onChange}
         height={height}
         width={width}
         ref={ref}
       >
         <S.OptionItem
-          selected
-          value="All"
+          value={placeholder}
           disabled={description ? false : true}
         >
           {description ? `${description}: ${placeholder}` : `${placeholder}`}

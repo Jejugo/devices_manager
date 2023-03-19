@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import DropdownFilter from "./DropdownFilter";
+import { ThemeProvider } from 'styled-components'
 import List from "../List/List";
+import { lightTheme } from "../../styles/themes";
 
 const MOCK_OBJECT = [
   {
@@ -79,26 +81,6 @@ const MOCK_OBJECT = [
   },
 ];
 
-const DropdownWithList = () => {
-  const [dropdownValue, setDropdownValue] = useState<string>("1");
-  const items = [
-    { id: "1", name: "Item 1", value: "1" },
-    { id: "2", name: "Item 2", value: "2" },
-    { id: "3", name: "Item 3", value: "3" },
-  ];
-
-  return (
-    <>
-      <DropdownFilter
-        items={items}
-        value={dropdownValue}
-        onChange={(e: any) => setDropdownValue(e.target.value)}
-        description="test dropdown"
-      />
-      <List items={MOCK_OBJECT} />
-    </>
-  );
-};
 
 describe("DropdownFilter", () => {
   const items = [
@@ -110,13 +92,14 @@ describe("DropdownFilter", () => {
   it("renders a dropdown with options and calls onChange when a different value is selected", () => {
     const handleChange = jest.fn();
     render(
+      <ThemeProvider theme={lightTheme}>
       <DropdownFilter
-        tabIndex={1}
         description="Test Dropdown"
         items={items}
         value="All"
         onChange={handleChange}
       />
+      </ThemeProvider>
     );
 
     const dropdown = screen.getByRole("combobox");
@@ -132,9 +115,5 @@ describe("DropdownFilter", () => {
 
     userEvent.selectOptions(dropdown, "2");
     expect(handleChange).toHaveBeenCalledTimes(1);
-  });
-
-  it("blabla", () => {
-    render(<DropdownWithList />);
   });
 });
